@@ -1,0 +1,46 @@
+
+
+/*Interfacing 16x2 LCD screen with PIC16F877A microcontroller in 4 Bit mode
+ANOKHAUTOMATION*/
+__CONFIG(FOSC_HS & WDTE_OFF & PWRTE_OFF & BOREN_ON & LVP_OFF & CPD_OFF & WRT_OFF & CP_OFF);
+#include <xc.h>
+#include "lcd.h"
+#define _XTAL_FREQ 10000000
+
+void display(int a,int b);
+char arr[]={"ANOKHAUTOMATION"};
+void main(void)
+{TRISB0 =TRISB1=TRISB4=TRISB5=TRISB6=TRISB7=TRISC=0;
+TRISB2=TRISB3=1;
+RC0 =0;
+display (0x02,0);//Command for Enable LCD to 4 Bit mode
+display (0x01,0);//Command for clear screen
+display (0x0c,0);//Command for display on, cursor off, blink off
+display (0x28,0);// 4 bit interface, 2 lines, 5x8 font      
+while(1){
+    
+}   //display (0x83,0);//Print at 1st RAW,3rd column
+    display (0x80,0);//Print at 1st RAW,1st column
+    for(int i=0;arr[i]!='\0';i++)
+    {display(arr[i],1);
+    }if(RB2 ==1)
+    {while(RB2==1);
+    {RC0 =RC0^1;
+    }
+    }
+}
+void display(int a,int b);
+{
+    PORTB=a;
+    RB0=b;
+    RB1=1;
+    __delay_ms(10);
+    RB1 =0;
+    __delay_ms(10);
+    PORTB=a<<4;
+    RB0=b;
+    RB1=1;
+    __delay_ms(10);
+    RB1=0;
+    __delay_ms(10);
+}
